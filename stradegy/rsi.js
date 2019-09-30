@@ -1,3 +1,4 @@
+var trade = require('../exec/trade')
 /*
 
   RSI - cykedev 14/02/2014
@@ -25,7 +26,6 @@ method.init = function() {
 
 method.check = function(isHot,isCold) {
   if( isHot ) {
-
     // new trend detected
     if(this.trend.direction !== 'high')
       this.trend = {
@@ -37,12 +37,13 @@ method.check = function(isHot,isCold) {
 
     this.trend.duration++;
 
-    if(this.trend.duration >= 1)
+    if(this.trend.duration >= 2)
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
       console.log("go short")
+      trade.sell()
       //this.advice('short');
     } else
       console.log("go...")
@@ -61,19 +62,19 @@ method.check = function(isHot,isCold) {
 
     this.trend.duration++;
 
-    if(this.trend.duration >= 1)
+    if(this.trend.duration >= 2)
       this.trend.persisted = true;
 
     if(this.trend.persisted && !this.trend.adviced) {
       this.trend.adviced = true;
       console.log("go long")
+      trade.buy()
       //this.advice('long');
     } else
       console.log("go...")
       //this.advice();
 
   } else {
-      this.init()
       console.log("go...")
     //this.advice();
   }
